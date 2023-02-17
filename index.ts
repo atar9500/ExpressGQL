@@ -1,15 +1,38 @@
-import express, {Express, Request, Response} from 'express';
+import {ApolloServer} from '@apollo/server';
+import {expressMiddleware} from '@apollo/server/express4';
+import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+
+import {authors, notes} from '~/mock';
+import {readFileSync} from 'fs';
+import {MangoContext} from '~/shared/types';
+
+const typeDefs = readFileSync('./schema.graphql', {encoding: 'utf-8'});
 
 dotenv.config();
 
-const app: Express = express();
-const port = process.env.PORT;
+const app = express();
+const httpServer = http.createServer(app);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
+const server = new ApolloServer<MangoContext>({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
 });
+await server.start();
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+app.use(
+  cors(),
+  bodyParser.json(),
+  expressMiddleware(server, {
+    context: async () => ({data: {authors, notes}}),
+  }),
+);
+
+await new Promise(() => httpServer.listen({port: process.env.PORT}));
+
+console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);
