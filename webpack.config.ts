@@ -18,10 +18,8 @@ const getConfig = (
     path: path.resolve(__dirname, `.env.${mode}`),
   });
 
-  console.log('mode', mode);
-
   return {
-    entry: './src/index.ts',
+    entry: './index.ts',
     target: 'node',
     mode: argv.mode === 'production' ? 'production' : 'development',
     externals: [nodeExternals()],
@@ -46,6 +44,11 @@ const getConfig = (
           loader: 'ts-loader',
           options: {},
           exclude: /node_modules/,
+        },
+        {
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader',
         },
       ],
     },

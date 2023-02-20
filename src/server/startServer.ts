@@ -7,11 +7,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 
-import {readFileSync} from 'fs';
 import DBClient, {AUTHOR_IDS, NOTE_IDS, DBContext} from '~/shared/db';
 import resolvers from '~/resolvers';
 
-const typeDefs = readFileSync('./schema.graphql', {encoding: 'utf-8'});
+import typeDefs from '~/shared/types/schema.gql';
 
 dotenv.config();
 
@@ -43,4 +42,4 @@ const startServer = async () => {
   });
 };
 
-startServer();
+export default startServer;

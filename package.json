@@ -1,7 +1,7 @@
 {
   "name": "my-node-server",
   "version": "1.0.0",
-  "main": "./src/index.ts",
+  "main": "./index.ts",
   "license": "MIT",
   "scripts": {
     "clean:dev": "rimraf build",
@@ -39,6 +39,7 @@
     "babel-loader": "^9.1.2",
     "concurrently": "^7.6.0",
     "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-node": "^11.1.0",
