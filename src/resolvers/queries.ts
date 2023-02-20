@@ -1,10 +1,4 @@
-import {
-  Author,
-  MangoContext,
-  Note,
-  NoteDetails,
-  QueryResolvers,
-} from '~/shared/types';
+import {Author, Note, NoteDetails, QueryResolvers} from '~/shared/types';
 import getAuthorById from '~/shared/utils/getAuthorById';
 
 const queries: QueryResolvers = {
