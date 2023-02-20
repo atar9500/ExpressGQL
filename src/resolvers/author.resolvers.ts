@@ -1,5 +1,4 @@
 import {AuthorResolvers} from '~/shared/types';
-
 import {convertNote} from '~/shared/utils/convertNote';
 
 const authorResolvers: AuthorResolvers = {

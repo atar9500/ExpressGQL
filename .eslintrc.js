@@ -1,10 +1,17 @@
 module.exports = {
-  extends: 'airbnb-base',
-  root: true,
-  plugins: ['@typescript-eslint', 'prettier', 'import', '@welldone-software'],
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  ignorePatterns: ['generated.ts'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  plugins: ['@typescript-eslint', 'import', '@welldone-software'],
   rules: {
-    'no-unused-vars': ['warn'],
-    'no-var': ['error'],
     'import/order': [
       'error',
       {
@@ -26,8 +33,7 @@ module.exports = {
         ],
       },
     ],
+    'linebreak-style': ['error', 'unix'],
     'no-console': ['warn', {allow: ['error', 'warn']}],
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@welldone-software/modules-engagement': 'error',
   },
 };
