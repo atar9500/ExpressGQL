@@ -1,20 +1,17 @@
 {
   "name": "my-node-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "serve": "webpack --watch --env mode=development --config webpack.config.ts",
     "clean:dev": "rimraf build",
     "clean:prod": "rimraf dist",
-    "build": "webpack --mode production --config webpack.config.ts",
-    "dev": "nodemon build/index.js --watch build",
-    "prod": "nodemon dist/index.js --watch dist",
+    "watch:dev": "nodemon build/index.js --watch build",
+    "watch:prod": "nodemon dist/index.js --watch dist",
+    "dev": "webpack --watch --env mode=dev --config webpack.config.ts",
+    "start": "webpack --mode production --config webpack.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "codegen": "graphql-codegen --config codegen.yml"
-  },
-  "imports": {
-    "~/*": "./src/*"
   },
   "dependencies": {
     "@apollo/server": "^4.4.0",

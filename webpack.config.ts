@@ -3,13 +3,22 @@ import nodeExternals from 'webpack-node-externals';
 import {Configuration} from 'webpack';
 import WebpackShellPluginNext from 'webpack-shell-plugin-next';
 
+const OPTIONS: Record<string, {mode: string; buildFolder: string}> = {
+  prod: {mode: 'prod', buildFolder: 'dist'},
+  dev: {mode: 'dev', buildFolder: 'build'},
+};
+
 const getConfig = (
   env: Record<string, string>,
   argv: Record<string, string>,
 ): Configuration => {
+  const {mode, buildFolder} = OPTIONS[env.mode || 'prod'];
+
   require('dotenv').config({
-    path: path.resolve(__dirname, `.env.${env.mode}.local`),
+    path: path.resolve(__dirname, `.env.${mode}`),
   });
+
+  console.log('mode', mode);
 
   return {
     entry: './src/index.ts',
@@ -19,12 +28,12 @@ const getConfig = (
     plugins: [
       new WebpackShellPluginNext({
         onBuildStart: {
-          scripts: ['npm run clean:dev && npm run clean:prod'],
+          scripts: [`yarn clean:${mode}`],
           blocking: true,
           parallel: false,
         },
         onBuildEnd: {
-          scripts: ['npm run dev'],
+          scripts: [`yarn watch:${mode}`],
           blocking: false,
           parallel: true,
         },
@@ -47,7 +56,7 @@ const getConfig = (
       },
     },
     output: {
-      path: path.join(__dirname, 'build'),
+      path: path.join(__dirname, buildFolder),
       filename: 'index.js',
     },
     optimization: {
