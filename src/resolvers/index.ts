@@ -1,5 +1,6 @@
-import authorResolvers from './authorResolvers';
-import noteResolvers from './noteResolvers';
-import queries from './queries';
+import Author from './author.resolvers';
+import Note from './note.resolvers';
+import Query from './query.resolvers';
+import Mutation from './mutation.resolvers';
 
-export default {...authorResolvers, ...noteResolvers, ...queries};
+export default {Author, Note, Query, Mutation};

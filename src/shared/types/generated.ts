@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { MangoContext } from './index';
+import { DBContext } from '../db';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -15,17 +15,13 @@ export type Scalars = {
   Float: number;
 };
 
-export type Author = AuthorDetails & {
+export type Author = {
   __typename?: 'Author';
-  notes: Array<NoteDetails>;
-};
-
-export type AuthorDetails = {
-  __typename?: 'AuthorDetails';
   avatar?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  notes: Array<Note>;
 };
 
 export type Mutation = {
@@ -35,19 +31,22 @@ export type Mutation = {
 
 
 export type MutationAddNoteArgs = {
-  note?: InputMaybe<Note>;
+  data: NoteData;
 };
 
-export type Note = NoteDetails & {
+export type Note = {
   __typename?: 'Note';
-  author: AuthorDetails;
-};
-
-export type NoteDetails = {
-  __typename?: 'NoteDetails';
+  author: Author;
   color: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  title: Scalars['String'];
+};
+
+export type NoteData = {
+  authorId: Scalars['String'];
+  color: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -144,12 +143,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Author: ResolverTypeWrapper<Author>;
-  AuthorDetails: ResolverTypeWrapper<AuthorDetails>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Note: ResolverTypeWrapper<Note>;
-  NoteDetails: ResolverTypeWrapper<NoteDetails>;
+  NoteData: NoteData;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
@@ -157,39 +155,30 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Author: Author;
-  AuthorDetails: AuthorDetails;
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
   Mutation: {};
   Note: Note;
-  NoteDetails: NoteDetails;
+  NoteData: NoteData;
   Query: {};
   String: Scalars['String'];
 }>;
 
-export type AuthorResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['Author']> = ResolversObject<{
-  notes?: Resolver<Array<ResolversTypes['NoteDetails']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthorDetailsResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['AuthorDetails']> = ResolversObject<{
+export type AuthorResolvers<ContextType = DBContext, ParentType = ResolversParentTypes['Author']> = ResolversObject<{
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  notes?: Resolver<Array<ResolversTypes['Note']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MutationResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['Mutation']> = ResolversObject<{
-  addNote?: Resolver<ResolversTypes['Note'], ParentType, ContextType, Partial<MutationAddNoteArgs>>;
+export type MutationResolvers<ContextType = DBContext, ParentType = ResolversParentTypes['Mutation']> = ResolversObject<{
+  addNote?: Resolver<ResolversTypes['Note'], ParentType, ContextType, RequireFields<MutationAddNoteArgs, 'data'>>;
 }>;
 
-export type NoteResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['Note']> = ResolversObject<{
-  author?: Resolver<ResolversTypes['AuthorDetails'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type NoteDetailsResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['NoteDetails']> = ResolversObject<{
+export type NoteResolvers<ContextType = DBContext, ParentType = ResolversParentTypes['Note']> = ResolversObject<{
+  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
   color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -197,18 +186,16 @@ export type NoteDetailsResolvers<ContextType = MangoContext, ParentType = Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type QueryResolvers<ContextType = MangoContext, ParentType = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = DBContext, ParentType = ResolversParentTypes['Query']> = ResolversObject<{
   author?: Resolver<ResolversTypes['Author'], ParentType, ContextType, RequireFields<QueryAuthorArgs, 'id'>>;
   note?: Resolver<ResolversTypes['Note'], ParentType, ContextType, RequireFields<QueryNoteArgs, 'id'>>;
   notes?: Resolver<Array<ResolversTypes['Note']>, ParentType, ContextType, RequireFields<QueryNotesArgs, 'authorId'>>;
 }>;
 
-export type Resolvers<ContextType = MangoContext> = ResolversObject<{
+export type Resolvers<ContextType = DBContext> = ResolversObject<{
   Author?: AuthorResolvers<ContextType>;
-  AuthorDetails?: AuthorDetailsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Note?: NoteResolvers<ContextType>;
-  NoteDetails?: NoteDetailsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 }>;
 

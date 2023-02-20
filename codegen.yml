@@ -8,4 +8,4 @@ generates:
     config:
       useIndexSignature: true
       allowParentTypeOverride: true,
-      contextType: './index#MangoContext'
+      contextType: '../db#DBContext'

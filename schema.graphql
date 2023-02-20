@@ -1,23 +1,17 @@
-type AuthorDetails {
+type Author {
   id: ID!
   name: String!
   avatar: String
   email: String!
+  notes: [Note!]!
 }
 
-type NoteDetails {
+type Note {
   id: ID!
   title: String!
   description: String
   color: String!
-}
-
-type Author implements AuthorDetails {
-  notes: [NoteDetails!]!
-}
-
-type Note implements NoteDetails {
-  author: AuthorDetails!
+  author: Author!
 }
 
 type Query {
@@ -26,6 +20,13 @@ type Query {
   author(id: ID!): Author!
 }
 
+input NoteData {
+  title: String!
+  description: String
+  color: String!
+  authorId: String!
+}
+
 type Mutation {
-  addNote(note: Note): Note!
+  addNote(data: NoteData!): Note!
 }
