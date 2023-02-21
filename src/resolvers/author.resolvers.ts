@@ -1,9 +1,10 @@
-import {AuthorResolvers} from '~/shared/types';
-import {convertNote} from '~/shared/utils/convertNote';
+import {UserResolvers} from '~/shared/types';
 
-const authorResolvers: AuthorResolvers = {
+import convertNote from './utils/convertNote';
+
+const authorResolvers: UserResolvers = {
   notes: async (parent, _args, db) => {
-    const noteModels = await db.getNotesByAuthor(parent.id);
+    const noteModels = await db.getNotesByUser(parent.id);
     return noteModels.map(convertNote);
   },
 };

@@ -1,5 +1,6 @@
 import {MutationResolvers} from '~/shared/types';
-import {convertNote} from '~/shared/utils/convertNote';
+
+import convertNote from './utils/convertNote';
 
 const mutations: MutationResolvers = {
   addNote: async (_parent, args, db) => {

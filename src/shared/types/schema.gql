@@ -1,4 +1,4 @@
-type Author {
+type User {
   id: ID!
   name: String!
   avatar: String
@@ -11,14 +11,14 @@ type Note {
   title: String!
   description: String
   color: String!
-  author: Author!
+  author: User!
   archived: Boolean
 }
 
 type Query {
   notes(authorId: ID!): [Note!]!
   note(id: ID!): Note!
-  author(id: ID!): Author!
+  author(id: ID!): User!
 }
 
 input NoteData {

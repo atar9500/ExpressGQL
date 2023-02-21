@@ -1,9 +1,9 @@
 import {HydratedDocument} from 'mongoose';
 
-import {NoteData} from '~/shared/types';
+import {NoteData, UserModel, NoteModel} from '~/shared/types';
 
-import Author, {AuthorModel} from './author';
-import Note, {NoteModel} from './note';
+import User from './user';
+import Note from './note';
 
 const getNote = async (id: string): Promise<HydratedDocument<NoteModel>> => {
   const note = await Note.findById(id);
@@ -13,17 +13,15 @@ const getNote = async (id: string): Promise<HydratedDocument<NoteModel>> => {
   return note;
 };
 
-const getAuthor = async (
-  id: string,
-): Promise<HydratedDocument<AuthorModel>> => {
-  const author = await Author.findById(id);
+const getUser = async (id: string): Promise<HydratedDocument<UserModel>> => {
+  const author = await User.findById(id);
   if (!author) {
-    throw Error(`Author id ${id} could not be found!`);
+    throw Error(`User id ${id} could not be found!`);
   }
   return author;
 };
 
-const getNotesByAuthor = async (authorId: string): Promise<NoteModel[]> => {
+const getNotesByUser = async (authorId: string): Promise<NoteModel[]> => {
   return await Note.find({authorId});
 };
 
@@ -53,8 +51,8 @@ const unarchiveNote = async (id: string): Promise<string> => {
 
 const DBClient = {
   getNote,
-  getAuthor,
-  getNotesByAuthor,
+  getUser,
+  getNotesByUser,
   addNote,
   deleteNote,
   archiveNote,

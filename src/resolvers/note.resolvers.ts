@@ -1,10 +1,11 @@
 import {NoteResolvers} from '~/shared/types';
-import {convertAuthor} from '~/shared/utils/convertAuthor';
+
+import convertUser from './utils/convertUser';
 
 const noteResolvers: NoteResolvers = {
   author: async (parent, _args, db) => {
-    const author = await db.getAuthor(parent.author.id);
-    return convertAuthor(author);
+    const author = await db.getUser(parent.author.id);
+    return convertUser(author);
   },
 };
 
