@@ -34,6 +34,6 @@ module.exports = {
       },
     ],
     'linebreak-style': ['error', 'unix'],
-    'no-console': ['warn', {allow: ['error', 'warn']}],
+    'no-debugger': 'warn',
   },
 };

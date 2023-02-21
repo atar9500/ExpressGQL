@@ -2,8 +2,10 @@ import {NoteResolvers} from '~/shared/types';
 import {convertAuthor} from '~/shared/utils/convertAuthor';
 
 const noteResolvers: NoteResolvers = {
-  author: (parent, _args, context) =>
-    convertAuthor(context.getAuthor(parent.author.id)),
+  author: async (parent, _args, db) => {
+    const author = await db.getAuthor(parent.author.id);
+    return convertAuthor(author);
+  },
 };
 
 export default noteResolvers;

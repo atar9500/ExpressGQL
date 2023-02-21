@@ -3,21 +3,18 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
 import {ApolloServer} from '@apollo/server';
 import {expressMiddleware} from '@apollo/server/express4';
 import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
 
-import DBClient, {AUTHOR_IDS, NOTE_IDS, DBContext} from '~/shared/db';
+import DBClient, {DBContext} from '~/db';
 import resolvers from '~/resolvers';
 import typeDefs from '~/shared/types/schema.gql';
 
-dotenv.config();
+export const startServer = async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
 
-const app = express();
-const httpServer = http.createServer(app);
-
-const startServer = async () => {
   const server = new ApolloServer<DBContext>({
     typeDefs,
     resolvers,
@@ -35,11 +32,8 @@ const startServer = async () => {
 
   await new Promise(() => {
     httpServer.listen({port: process.env.PORT});
-
-    console.log(`Example app listening on port ${process.env.PORT}`);
-    console.log(`AUTHOR_IDS: ${JSON.stringify(AUTHOR_IDS, null, 2)}`);
-    console.log(`NOTE_IDS: ${JSON.stringify(NOTE_IDS, null, 2)}`);
+    console.log(
+      `Example app listening on http://localhost:${process.env.PORT}/`,
+    );
   });
 };
-
-export default startServer;
