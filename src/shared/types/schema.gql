@@ -12,6 +12,7 @@ type Note {
   description: String
   color: String!
   author: Author!
+  archived: Boolean
 }
 
 type Query {
@@ -27,6 +28,13 @@ input NoteData {
   authorId: String!
 }
 
+type NoteId {
+  id: ID!
+}
+
 type Mutation {
   addNote(data: NoteData!): Note!
+  deleteNote(id: ID!): NoteId!
+  archiveNote(id: ID!): NoteId!
+  unarchiveNote(id: ID!): NoteId!
 }
