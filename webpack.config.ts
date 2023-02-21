@@ -1,7 +1,9 @@
 import path from 'path';
+
 import nodeExternals from 'webpack-node-externals';
 import {Configuration} from 'webpack';
 import WebpackShellPluginNext from 'webpack-shell-plugin-next';
+import dotenv from 'dotenv';
 
 const OPTIONS: Record<string, {mode: string; buildFolder: string}> = {
   prod: {mode: 'prod', buildFolder: 'dist'},
@@ -14,7 +16,7 @@ const getConfig = (
 ): Configuration => {
   const {mode, buildFolder} = OPTIONS[env.mode || 'prod'];
 
-  require('dotenv').config({
+  dotenv.config({
     path: path.resolve(__dirname, `.env.${mode}`),
   });
 
