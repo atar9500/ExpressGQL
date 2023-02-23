@@ -3,7 +3,6 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import {expressjwt as jwt} from 'express-jwt';
 import {ApolloServer} from '@apollo/server';
 import {expressMiddleware} from '@apollo/server/express4';
 import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
@@ -11,6 +10,7 @@ import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttp
 import DBClient, {DBContext} from '~/db';
 import resolvers from '~/resolvers';
 import typeDefs from '~/shared/types/schema.gql';
+
 import jwtMiddleware from './jwtMiddleware';
 
 export const startServer = async () => {

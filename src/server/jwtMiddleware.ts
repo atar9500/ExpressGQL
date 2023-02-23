@@ -4,6 +4,7 @@ const BEARER_REGEX = /^(Bearer+\s)*([a-zA-Z0-9]+)$/;
 
 const jwtMiddleware = () =>
   jwt({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     secret: process.env.SECRET!,
     algorithms: ['HS256'],
     credentialsRequired: false,
