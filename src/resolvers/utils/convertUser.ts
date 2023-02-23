@@ -1,7 +1,7 @@
-import {User, UserModel} from '~/shared/types';
+import {User, UserRow} from '~/shared/types';
 
-const convertUser = (author: UserModel): User => ({
-  ...author,
+const convertUser = <T extends UserRow = UserRow>(user: T): User => ({
+  ...user,
   notes: [],
 });
 

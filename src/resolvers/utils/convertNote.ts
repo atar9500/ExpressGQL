@@ -1,6 +1,6 @@
-import {Note, NoteModel} from '~/shared/types';
+import {Note, NoteRow} from '~/shared/types';
 
-const convertNote = (note: NoteModel): Note => ({
+const convertNote = (note: NoteRow): Note => ({
   ...note,
   author: {id: note.authorId, email: '', name: '', notes: []},
 });

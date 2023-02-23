@@ -1,11 +1,14 @@
-import {HydratedDocument} from 'mongoose';
+import {FilterQuery, HydratedDocument} from 'mongoose';
 
-import {NoteData, UserModel, NoteModel} from '~/shared/types';
+import {NoteData, UserRow, NoteRow} from '~/shared/types';
 
-import User from './user';
-import Note from './note';
+import User, {UserMethods} from './user.model';
+import Note from './note.model';
 
-const getNote = async (id: string): Promise<HydratedDocument<NoteModel>> => {
+type UserDoc = HydratedDocument<UserRow, UserMethods>;
+type NoteDoc = HydratedDocument<NoteRow>;
+
+const getNote = async (id: string): Promise<NoteDoc> => {
   const note = await Note.findById(id);
   if (!note) {
     throw Error(`Note id ${id} could not be found!`);
@@ -13,19 +16,26 @@ const getNote = async (id: string): Promise<HydratedDocument<NoteModel>> => {
   return note;
 };
 
-const getUser = async (id: string): Promise<HydratedDocument<UserModel>> => {
-  const author = await User.findById(id);
-  if (!author) {
-    throw Error(`User id ${id} could not be found!`);
+const getUser = async (
+  queryParams: string | FilterQuery<UserRow>,
+): Promise<UserDoc> => {
+  let user: UserDoc | null;
+  if (typeof queryParams === 'string') {
+    user = await User.findById(queryParams);
+  } else {
+    user = await User.findOne(queryParams);
   }
-  return author;
+  if (!user) {
+    throw Error(`User could not be found, Query params: ${queryParams}`);
+  }
+  return user;
 };
 
-const getNotesByUser = async (authorId: string): Promise<NoteModel[]> => {
+const getNotesByUser = async (authorId: string): Promise<NoteRow[]> => {
   return await Note.find({authorId});
 };
 
-const addNote = async (data: NoteData): Promise<NoteModel> => {
+const addNote = async (data: NoteData): Promise<NoteRow> => {
   const note = new Note(data);
   return await note.save();
 };
